@@ -5,11 +5,12 @@ from aiogram import types
 
 
 from config import token
+from ethermine_check import check_status_ethermine
+from etherscan_check import ether_scan
 
 
 bot = Bot(token=token)
 dp = Dispatcher(bot)
-
 
 
 @dp.message_handler(commands=['start', 'help'])
@@ -17,14 +18,15 @@ async def send_welcome(message: types.Message):
         await message.reply("Привет! \nЯ ассистент чата Биссектора. "
                             "\nПока что. \nСкоро стану скайнетом")
 
+
 @dp.message_handler(commands=['miners'])
 async def check_miners(message: types.Message):
-        await bot.send_message(chat_id=message.chat.id, text="тут будет статистика ригов")
+        await bot.send_message(chat_id=message.chat.id, text=check_status_ethermine(), parse_mode='Markdown')
 
 
 @dp.message_handler(commands=['balance'])
 async def check_eth_balance(message: types.Message):
-        await bot.send_message(chat_id=message.chat.id, text="тут бусдет статистика кошелька")
+        await bot.send_message(chat_id=message.chat.id, text=ether_scan(), parse_mode='Markdown')
 
 
 if __name__ == '__main__':

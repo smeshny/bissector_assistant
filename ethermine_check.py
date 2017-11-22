@@ -2,7 +2,6 @@ import requests
 from datetime import datetime
 
 
-
 def request():
     try:
         r = requests.get(url='https://api.ethermine.org/'
@@ -22,7 +21,7 @@ def request():
 
 def check_status_ethermine():
     r = request().json()
-    print(r)
+
     lastSeen_timestamp_moscow_time = int(r['data']['lastSeen']) + 60 * 60 * 3
     reportedHashrate = int(round((int(r['data']['reportedHashrate'])/1000000), 3))
     realHashrate = int(round((int(r['data']['averageHashrate'])/1000000), 3))
@@ -38,17 +37,12 @@ def check_status_ethermine():
 
     moscow_time = datetime.utcfromtimestamp(lastSeen_timestamp_moscow_time).strftime('%H:%M:%S %d-%m-%Y')
 
-    return "Ригов в работе: " + str(activeWorkers) + "\n" + \
+    return "*Ригов в работе: *" + str(activeWorkers) + "\n" + \
            "Последний пинг: " + str(moscow_time) + "\n" + \
            "Хэшрэйт на ригах: " + str(reportedHashrate) + " Mh/s" + "\n" + \
            "Учтенный хэшрейт: " + str(realHashrate) + " Mh/s" + "\n" + \
            "Текущий баланс на пуле: " + str(unpaid_balance) + " ETH" + "\n" + \
-           "Эфира в сутки: " + str(coins_per_24) + " ETH" + "\n" + \
+           "*Эфира в сутки: *" + str(coins_per_24) + " ETH" + "\n" + \
            "Эфира в месяц: " + str(coins_per_month) + " ETH" + "\n" + \
            "Долларов в сутки: " + str(usd_per_24) + " USD" + "\n" + \
-           "Долларов в месяц: " + str(usd_per_month) + " USD" + "\n"
-
-
-print(check_status_ethermine())
-
-
+           "*Долларов в месяц: *" + str(usd_per_month) + " USD" + "\n"
