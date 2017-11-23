@@ -1,23 +1,6 @@
-import time
-import datetime
-
 import requests
 
 from config import etherscan_token
-
-
-# Get ETHER LastPrice Price
-#
-#     https://api.etherscan.io/api?module=stats&action=ethprice&apikey=YourApiKeyToken
-#
-
-#  Token Info
-#
-#
-# Get ERC20-Token TotalSupply by ContractAddress
-#
-#     https://api.etherscan.io/api?module=stats&action=tokensupply&contractaddress=0x57d90b64a1a57749b0f932f1a3395792e12e7055&apikey=YourApiKeyToken
-#
 
 
 def ether_scan():
@@ -29,6 +12,7 @@ def ether_scan():
                                       wallet +'&tag=latest&apikey=' + api_key).json()
         request_usd_price = requests.get('https://api.etherscan.io/api?module=stats&action=ethprice&apikey='
                                          + api_key).json()
+        request_usd_rub_cb_price = requests.get("https://www.cbr-xml-daily.ru/daily_json.js").json()
     except requests.HTTPError as errh:
         return "HTTP error: ", errh
     except requests.Timeout as errt:
@@ -42,8 +26,12 @@ def ether_scan():
     balance_eth = round(int(request_balance["result"]) / 1000000000000000000, 3)
     eth_usd = float(request_usd_price['result']['ethusd'])
     balance_usd = round(float(balance_eth) * eth_usd, 2)
+    cb_usd_rub = float(request_usd_rub_cb_price["Valute"]["USD"]["Value"])
+    cb_usd_rub_round = round(cb_usd_rub, 2)
+    balance_RUR = round(cb_usd_rub * balance_usd, 2)
 
-    return "\n" + "*Эфира на кошельке: " + str(balance_eth) + "ETH" + "\n" \
+    return "\n" + "*ETH на кошельке: " + str(balance_eth) + "ETH" + "\n" \
            "В долларах: " + str(balance_usd) + "USD" + "\n" \
-           "Курс эфира к доллару: " + str(eth_usd) + "*"
-
+           "В рублях: " + str(balance_RUR) + "RUR" + "\n" \
+           "Курс ETH: " + str(eth_usd) + "USD" + "\n" \
+           "Курс USD ЦБ: " + str(cb_usd_rub_round) + "RUR" + "*"
