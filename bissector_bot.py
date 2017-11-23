@@ -40,3 +40,11 @@ async def check_eth_balance(message: types.Message):
 
 if __name__ == '__main__':
         executor.start_pooling(dp)
+
+
+'''
+commands:
+menu - вызвать меню
+balance - узнать количество эфира на кошельке
+miners - узнать статистику по ферме
+'''
